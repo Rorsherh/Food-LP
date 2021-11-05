@@ -129,6 +129,7 @@ window.addEventListener('DOMContentLoaded', () =>{
     modal.classList.add('show');
     modal.classList.remove('hide');
     document.body.style.overflow = 'hidden';
+    clearInterval(modalShowId);
   }
 
   function hideModal() {
@@ -153,5 +154,22 @@ window.addEventListener('DOMContentLoaded', () =>{
       hideModal();
     }
   });
-  
+
+  //pageYOffset - свойство окна Window , доступное только для чтения. Это то же свойство, что и scrollY и, как таковое,
+  // оно тоже возвращает количество пикселей, на которое прокручен документ по вертикали (вниз или вверх).
+  // Значение свойства равное 0.0 говорит о том, что в данный момент верхний край документа Document
+  // совпадает с верхним краем области содержимого окна.
+
+  //Element.clientHeight -Для остальных элементов - значение равно внутренней высоте элемента в пикселах,
+  //включая пространство между содержимым элемента и его границей (padding),но исключая высоту полосы горизонтальной прокрутки,
+  //и ширину отступа от границы элемента до родительского элемента (margin).
+  function showModalByScroll() {
+    if ((window.pageYOffset + document.documentElement.clientHeight) >= document.documentElement.scrollHeight) {
+        showModal();
+        window.removeEventListener('scroll', showModalByScroll);
+    }
+}
+
+  const modalShowId = setTimeout(showModal, 24000);
+  window.addEventListener('scroll', showModalByScroll);
 });
