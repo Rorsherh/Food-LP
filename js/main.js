@@ -86,7 +86,7 @@ window.addEventListener('DOMContentLoaded', () =>{
 
   /**
    * функция принимает элемент таймера на странице и обнавляет его
-   * @param {*} _selector 
+   * @param {*} _selector элемент страницы выполняющий роль таймера
    * @param {*} _endTime 
    * @returns 
    */
@@ -170,6 +170,94 @@ window.addEventListener('DOMContentLoaded', () =>{
     }
 }
 
-  const modalShowId = setTimeout(showModal, 24000);
-  window.addEventListener('scroll', showModalByScroll);
+/** константа в которой хранится время время до показа модального окна */  
+const modalShowId = setTimeout(showModal, 24000);
+window.addEventListener('scroll', showModalByScroll);
+
+
+// Используем классы для создания корточек
+
+class MenuCard {
+  /**
+   * Создает экземпляр карточки
+   * @constructor
+   * @this {MenuCard}
+   * @param {*} _src - путь до картинки
+   * @param {string} _alt - альтернативных текс картинки
+   * @param {*} _title - заголовок карточки
+   * @param {*} _descr - описание карточки
+   * @param {number} _price - цена товара
+   * @param {string} _parentSelector - селектор в который вставляется карточка
+   */
+  constructor(_src, _alt, _title, _descr, _price, _parentSelector) {
+    this.src = _src;
+    this.alt = _alt;
+    this.title = _title;
+    this.descr = _descr;
+    this.price = _price;
+    this.parent = document.querySelector(_parentSelector);
+    /** Курс валют */
+    this.transfer = 27;
+
+    this.changeToUAH();
+  }
+
+  /**
+   * Переводит цену товара в гривны
+   */
+  changeToUAH() {
+    this.price = this.price * this.transfer;
+  }
+
+  /**
+   * создает карточку товара и рендерит ее в верстку
+   */
+  render() {
+    const element = document.createElement('div');
+    element.innerHTML = `
+                <div class="menu__item">
+                    <img src=${this.src} alt=${this.alt}>
+                    <h3 class="menu__item-subtitle">${this.title}</h3>
+                    <div class="menu__item-descr">${this.descr}</div>
+                    <div class="menu__item-divider"></div>
+                    <div class="menu__item-price">
+                        <div class="menu__item-cost">Цена:</div>
+                        <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
+                    </div>
+                </div>
+                `;
+                this.parent.append(element);
+  }
+}
+
+new MenuCard(
+  "img/tabs/vegy.jpg",
+  "vegy",
+  'Меню "Фитнес"',
+  'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+  9,
+  '.menu .container'
+).render();
+
+new MenuCard(
+  "img/tabs/elite.jpg",
+  "elite",
+  'Меню “Премиум”',
+  'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+  14,
+  '.menu .container'
+).render();
+
+new MenuCard(
+  "img/tabs/post.jpg",
+  "post",
+  'Меню "Постное"',
+  'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
+  24,
+  '.menu .container'
+).render();
+
+
+
+
 });
