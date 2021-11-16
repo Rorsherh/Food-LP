@@ -52,7 +52,7 @@ window.addEventListener('DOMContentLoaded', () =>{
 
   // timer
 
-  const endTime = '2021-12-10';
+  const endTime = '2022-04-10';
   
   /**
    * функция расчитывающая время до конца окончания акции
@@ -189,13 +189,14 @@ class MenuCard {
    * @param {number} _price - цена товара
    * @param {string} _parentSelector - селектор в который вставляется карточка
    */
-  constructor(_src, _alt, _title, _descr, _price, _parentSelector) {
+  constructor(_src, _alt, _title, _descr, _price, _parentSelector, ..._classes) {
     this.src = _src;
     this.alt = _alt;
     this.title = _title;
     this.descr = _descr;
     this.price = _price;
     this.parent = document.querySelector(_parentSelector);
+    this.classes = _classes;
     /** Курс валют */
     this.transfer = 27;
 
@@ -214,8 +215,13 @@ class MenuCard {
    */
   render() {
     const element = document.createElement('div');
+    if (this.classes.length === 0) {
+      this.element = 'menu__item';
+      element.classList.add(this.element);
+    } else {
+      this.classes.forEach((_className) =>{ element.classList.add(_className); });
+    }
     element.innerHTML = `
-                <div class="menu__item">
                     <img src=${this.src} alt=${this.alt}>
                     <h3 class="menu__item-subtitle">${this.title}</h3>
                     <div class="menu__item-descr">${this.descr}</div>
@@ -223,8 +229,7 @@ class MenuCard {
                     <div class="menu__item-price">
                         <div class="menu__item-cost">Цена:</div>
                         <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
-                    </div>
-                </div>
+                    </div>                
                 `;
                 this.parent.append(element);
   }
@@ -245,7 +250,9 @@ new MenuCard(
   'Меню “Премиум”',
   'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
   14,
-  '.menu .container'
+  '.menu .container',
+  'menu__item',
+  "VOVA"
 ).render();
 
 new MenuCard(
@@ -254,7 +261,8 @@ new MenuCard(
   'Меню "Постное"',
   'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
   24,
-  '.menu .container'
+  '.menu .container',
+  'menu__item'
 ).render();
 
 
